@@ -1,0 +1,373 @@
+{
+  "userInfo": {
+    "keyPath":"$HOME/.ssh/aws.key.pem",
+    "NETWORK_ID":8888,
+    "aws":{
+      "userTag":"anonymousTag",
+      "projectTag": "klaytn",
+      "keyName":"aws.key",
+      "subnet": "subnet-3f123456789012345",
+      "zone":"ap-northeast-2a"
+    }
+  },
+  "source":{
+    "klaytn":{
+      "dockerImageTag":"klaytn-deploy",
+      "dockerPkgPath":"/klaytn-docker-pkg",
+      "binaryPath":"klaytn_bin",
+      "_overrideGenesisJson":"http://packages.klaytn.net/cypress/genesis.json",
+      "_overrideGenesisJson":"~/klaytn_baobab/ken-darwin-amd64/genesis.json",
+      "dataRaceDetection": false,
+      "dockerBaseImage":"klaytn/build_base:latest",
+      "git":{
+        "ref":"git@github.com:klaytn/klaytn.git",
+        "branch":"dev"
+      },
+      "homiOption": "--baobab-test",
+      "chaindata": "lumberjack",
+      "overwriteGenesis": false
+    },
+    "locust":{
+      "dockerImageTag":"klaytn-deploy-locust",
+      "dockerPkgPath":"/locust-docker-pkg",
+      "binaryPath":"locust_bin",
+      "git":{
+        "ref":"git@github.com:klaytn/klaytn-load-tester.git",
+        "branch":"master"
+      }
+    },
+    "locustSC":{
+      "dockerImageTag":"klaytn-deploy-locustSC",
+      "dockerPkgPath":"/locustSC-docker-pkg",
+      "binaryPath":"locustSC_bin",
+      "git":{
+        "ref":"git@github.com:klaytn/klaytn-load-tester.git",
+        "branch":"service_chain_node_test"
+      }
+    },
+    "tokenManager":{
+      "useTokenManager":false,
+      "timeout":120,
+      "node":{
+        "type":"EN",
+        "number":0
+      }
+    },
+    "rewardTester": {
+      "useRewardTester": false
+    }
+  },
+  "deploy":{
+    "CN": {
+      "aws":{
+        "numNodes":0,
+        "instanceType":"m5.large",
+        "securityGroup": ["sg-0abcdefghijklmnop"],
+        "imageId":"ami-0454bb2fefc7de534",
+        "storage":{"DeviceName":"/dev/sda1","VolumeSize":150},
+        "userName":"ubuntu",
+        "_imageIds":[
+          "ami-0454bb2fefc7de534",
+          "ami-0750a20e9959e44ff",
+          "ami-0a3eb6ca097b78895"
+        ],
+        "_subnets":[
+          "subnet-3f123456789012345",
+          "subnet-1f1fca8837accd87c",
+          "subnet-63b2ab3787a78dd13"
+        ],
+        "_zones":[
+          "ap-northeast-2a",
+          "ap-southeast-1a",
+          "ap-northeast-1c"
+        ],
+        "_securityGroups": [
+          ["sg-0abcdefghijklmnop"],
+          ["sg-12345678901234567"],
+          ["sg-0zasdfkjlksdfkjks"]
+        ]
+      },
+      "initOption":"",
+      "overrideOptions":{
+        "DATA_DIR":"~/klaytn/data",
+        "LOG_DIR":"~/klaytn/logs"
+      }
+    },
+    "PN": {
+      "aws":{
+        "numNodes":0,
+        "instanceType":"m5.large",
+        "securityGroup": ["sg-0abcdefghijklmnop"],
+        "imageId":"ami-0454bb2fefc7de534",
+        "storage":{"DeviceName":"/dev/sda1","VolumeSize":150},
+        "userName":"ubuntu"
+      },
+      "initOption":"",
+      "overrideOptions":{
+        "DATA_DIR":"~/klaytn/data",
+        "LOG_DIR":"~/klaytn/logs"
+      }
+    },
+    "EN": {
+      "aws":{
+        "numNodes":1,
+        "instanceType":"m5.large",
+        "securityGroup":["sg-0abcdefghijklmnop"],
+        "imageId":"ami-0e020234234283491",
+        "storage":{"DeviceName":"/dev/sda1","VolumeSize":4000},
+        "userName":"ubuntu"
+      },
+      "initOption":"",
+      "overrideOptions":{
+        "NETWORK":"cypress",
+        "NETWORK_ID":"",
+        "RPC_PORT":8551,
+        "RPC_API":"klay,personal",
+        "DATA_DIR":"/var/kend/data",
+        "LOG_DIR":"~/klaytn/logs"
+      }
+    },
+    "CNBN":{
+      "enabled":false,
+      "discoveryPort":32323,
+      "aws": {
+        "numNodes":1,
+        "instanceType":"t3.small",
+        "userName":"ubuntu",
+        "imageId":"ami-0454bb2fefc7de534",
+        "storage":{"DeviceName":"/dev/sda1","VolumeSize":50},
+        "securityGroup": ["sg-0abcdefghijklmnop"]
+      },
+      "overrideOptions":{
+        "KEY_PATH":"~/klaytn/keys/nodekey",
+        "DATA_DIR":"~/klaytn/data",
+        "LOG_DIR":"~/klaytn/logs"
+      }
+    },
+    "BN":{
+      "enabled":false,
+      "discoveryPort":32323,
+      "aws": {
+        "numNodes":1,
+        "instanceType":"t3.small",
+        "userName":"ubuntu",
+        "imageId":"ami-0454bb2fefc7de534",
+        "storage":{"DeviceName":"/dev/sda1","VolumeSize":50},
+        "securityGroup": ["sg-0abcdefghijklmnop"]
+      },
+      "overrideOptions":{
+        "KEY_PATH":"~/klaytn/keys/nodekey",
+        "DATA_DIR":"~/klaytn/data",
+        "LOG_DIR":"~/klaytn/logs"
+      }
+    },
+    "ServiceChain": {
+      "enabled": false,
+      "bridges": {
+        "mainBridge": "EN",
+        "subBridge": "SEN",
+        "num": 0
+      },
+      "anchoring": {
+        "SC_ANCHORING": 1,
+        "SC_ANCHORING_PERIOD": 1,
+        "SC_MAIN_BRIDGE_INDEXING": 1
+      },
+      "valueTransfer": {
+        "threshold": 1
+      }
+    },
+    "SCN": {
+      "aws":{
+        "numNodes":0,
+        "instanceType":"m5.large",
+        "userName":"ubuntu",
+        "imageId":"ami-0454bb2fefc7de534",
+        "storage":{"DeviceName":"/dev/sda1","VolumeSize":150},
+        "securityGroup": ["sg-0abcdefghijklmnop"]
+      },
+      "initOption":"",
+      "overrideOptions":{
+        "RPC_PORT":8551,
+        "DATA_DIR":"~/klaytn/data",
+        "LOG_DIR":"~/klaytn/logs"
+      }
+    },
+    "SPN": {
+      "aws":{
+        "numNodes":0,
+        "instanceType":"m5.large",
+        "userName":"ubuntu",
+        "imageId":"ami-0454bb2fefc7de534",
+        "storage":{"DeviceName":"/dev/sda1","VolumeSize":150},
+        "securityGroup": ["sg-0abcdefghijklmnop"]
+      },
+      "initOption":"",
+      "overrideOptions":{
+        "RPC_PORT":8551,
+        "DATA_DIR":"~/klaytn/data",
+        "LOG_DIR":"~/klaytn/logs"
+      }
+    },
+    "SEN": {
+      "aws":{
+        "numNodes":0,
+        "instanceType":"m5.large",
+        "userName":"ubuntu",
+        "imageId":"ami-0454bb2fefc7de534",
+        "storage":{"DeviceName":"/dev/sda1","VolumeSize":150},
+        "securityGroup": ["sg-0abcdefghijklmnop"]
+      },
+      "initOption":"",
+      "overrideOptions":{
+        "RPC_PORT":8551,
+        "DATA_DIR":"~/klaytn/data",
+        "LOG_DIR":"~/klaytn/logs"
+      }
+    },
+    "grafana":{
+      "enabled":true,
+      "prometheusPort":61001,
+      "aws": {
+        "numNodes":1,
+        "imageId":"ami-033a6a056910d1137",
+        "instanceType":"m5.large",
+        "securityGroup": ["sg-0abcdefghijklmnop"],
+        "storage":{"DeviceName":"/dev/xvda","VolumeSize":8},
+        "userName":"ec2-user"
+      }
+    },
+    "locustMaster":{
+      "enabled":false,
+      "performanceTest": {
+        "noweb": false,
+        "terminateInstancesAfterTest": false,
+        "upload":{
+          "enabled": false,
+          "s3Path": "s3://klaytn-perf-test/",
+          "db": "platform-performance-test",
+          "dbHost": "",
+          "dbPort":3306,
+          "dbUser": "",
+          "dbPassword": "",
+          "dbCharset": "utf8"
+        },
+        "testResultMetrics":[
+          "go_goroutines",
+          "klaytn_blockchain_block_tx_gauge",
+          "klaytn_tx_pool_pending_gauge",
+          "klaytn_tx_pool_queue_gauge",
+          "process_resident_memory_bytes",
+          "process_virtual_memory_bytes"],
+        "users": 100,
+        "hatchRate": 100,
+        "_runTime":["1h", "10m", "1h30m", "30s"],
+        "runTime":"20m",
+        "resultCollectionTime":"10m"
+      },
+      "aws":{
+        "numNodes":1,
+        "instanceType":"m5.large",
+        "imageId":"ami-033a6a056910d1137",
+        "securityGroup": ["sg-0abcdefghijklmnop"],
+        "storage":{"DeviceName":"/dev/xvda","VolumeSize":16},
+        "userName":"ec2-user"
+      }
+    },
+    "locustSlave": {
+      "enabled":false,
+      "enabledEthTest": false,
+      "_endpoints":["CN", "PN", "EN", "http://{IP}:{Port}"],
+      "endpoints":["EN"],
+      "RPS": 100,
+      "testcases":[
+        "analyticTx",
+        "analyticQueryLargestAccBalTx",
+        "analyticQueryLargestTxValTx",
+        "analyticQueryTotalTxValTx",
+        "cpuHeavyTx",
+        "doNothingTx",
+        "ioHeavyTx",
+        "ioHeavyScanTx",
+        "ioHeavyWriteTx",
+        "receiptCheckTx",
+        "smallBankTx",
+        "smallBankAlmagateTx",
+        "smallBankGetBalanceTx",
+        "smallBankSendPaymentTx",
+        "smallBankUpdateBalanceTx",
+        "smallBankUpdateSavingTx",
+        "smallBankWriteCheckTx",
+        "transferSignedTx",
+        "newValueTransferTC",
+        "newFeeDelegatedValueTransferTC",
+        "newFeeDelegatedValueTransferWithRatioTC",
+        "newValueTransferMemoTC",
+        "newFeeDelegatedValueTransferMemoTC",
+        "newFeeDelegatedValueTransferMemoWithRatioTC",
+        "newAccountCreationTC",
+        "newAccountUpdateTC",
+        "newFeeDelegatedAccountUpdateTC",
+        "newFeeDelegatedAccountUpdateWithRatioTC",
+        "newSmartContractDeployTC",
+        "newFeeDelegatedSmartContractDeployTC",
+        "newFeeDelegatedSmartContractDeployWithRatioTC",
+        "newSmartContractExecutionTC",
+        "newFeeDelegatedSmartContractExecutionTC",
+        "newFeeDelegatedSmartContractExecutionWithRatioTC",
+        "newCancelTC",
+        "newFeeDelegatedCancelTC",
+        "newFeeDelegatedCancelWithRatioTC",
+        "transferSignedWithCheckTx",
+        "transferUnsignedTx",
+        "userStorageSetTx",
+        "userStorageSetGetTx",
+        "ycsbTx",
+        "ycsbGetTx",
+        "ycsbSetTx"
+      ],
+      "numAccForSignedTx": 1000,
+      "activeAccPercent": 100,
+      "slavesPerNode":1,
+      "_overrideKeys":[],
+      "aws":{
+        "numNodes":1,
+        "instanceType":"m5.large",
+        "imageId":"ami-033a6a056910d1137",
+        "securityGroup": ["sg-0abcdefghijklmnop"],
+        "storage":{"DeviceName":"/dev/xvda","VolumeSize":16},
+        "userName":"ec2-user"
+      }
+    },
+    "locustSCMaster":{
+      "enabled":false,
+      "aws":{
+        "numNodes":1,
+        "instanceType":"m5.large",
+        "imageId":"ami-033a6a056910d1137",
+        "securityGroup": ["sg-0abcdefghijklmnop"],
+        "storage":{"DeviceName":"/dev/xvda","VolumeSize":16},
+        "userName":"ec2-user"
+      }
+    },
+    "locustSCSlave": {
+      "enabled":false,
+      "RPS": 100,
+      "_endpoints":["Select CN/EN/PN or http://{IP}:{Port}. You don't need to write SCN."],
+      "endpoints":["EN"],
+      "_testcases":["scKLAYTransferTc,scTokenTransferTc,scNFTTransferTc"],
+      "testcases":["scKLAYTransferTc"],
+      "_numAccForSignedTx": 100,
+      "slavesPerNode":2,
+      "aws":{
+        "numNodes":1,
+        "instanceType":"m5.large",
+        "imageId":"ami-033a6a056910d1137",
+        "securityGroup": ["sg-0abcdefghijklmnop"],
+        "storage":{"DeviceName":"/dev/xvda","VolumeSize":16},
+        "userName":"ec2-user"
+      }
+    }
+  },
+  "topology":"baobab"
+}

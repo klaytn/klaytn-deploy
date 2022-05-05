@@ -1,0 +1,56 @@
+# Local configs
+conf.json
+
+# Builds
+klaytn
+homi-output*
+klaytn_bin
+upload
+locust_bin
+klaytn-load-tester
+locustSC_bin
+locustSC-load-tester
+token-manager
+klaytn-reward-tester
+service-chain
+
+# Editors
+**/.*.sw*
+.idea
+
+# Virtualenvs
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
