@@ -32,7 +32,7 @@ class LocustCmd:
 
 		ref = jsonConf["source"]["locust"]["git"]["ref"]
 		branch = jsonConf["source"]["locust"]["git"]["branch"]
-		dockerImageTag = "%s-%s" % (jsonConf["source"]["locust"]["dockerImageTag"], jsonConf["userInfo"]["aws"]["userTag"])
+		dockerImageTag = "%s-%s" % (jsonConf["source"]["locust"]["dockerImageTag"], jsonConf["userInfo"]["aws"]["tags"]["User"])
 		dockerImageTag = dockerImageTag.lower()
 
 		locustDir = "klaytn-load-tester"
@@ -51,7 +51,7 @@ class LocustCmd:
 			ExecuteShell("cd %s && git clone %s" % (locustDir, klaytnRef))
 		ExecuteShell("cd %s/%s && git checkout master && git fetch -f %s %s && git checkout %s && git checkout -B build" % (locustDir, klaytnDir, klaytnRef, klaytnBranch, klaytnBranch))
 		ExecuteShell("cd %s && git checkout master && git fetch -f %s %s && git checkout %s  && git checkout -B build  && docker build -t %s ." % (locustDir, ref, branch, branch, dockerImageTag))
-		
+
 		if jsonConf["deploy"]["locustSlave"]["enabledEthTest"] == True:
 			ExecuteShell("cd %s/klayslave && git submodule init && git submodule update && cd ethTxGenerator && env GOOS=linux GOARCH=amd64 go build -v" % (locustDir))
 
@@ -61,7 +61,7 @@ class LocustCmd:
 		if not self.isEnabled(jsonConf):
 			return
 
-		dockerImageTag = "%s-%s" % (jsonConf["source"]["locust"]["dockerImageTag"], jsonConf["userInfo"]["aws"]["userTag"])
+		dockerImageTag = "%s-%s" % (jsonConf["source"]["locust"]["dockerImageTag"], jsonConf["userInfo"]["aws"]["tags"]["User"])
 		dockerImageTag = dockerImageTag.lower()
 		binaryPath = jsonConf["source"]["locust"]["binaryPath"]
 		dockerPkgPath = jsonConf["source"]["locust"]["dockerPkgPath"]

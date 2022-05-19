@@ -3,8 +3,11 @@
     "keyPath":"$HOME/.ssh/aws.key.pem",
     "NETWORK_ID":8888,
     "aws":{
-      "userTag":"anonymousTag",
-      "projectTag": "klaytn",
+      "tags": {
+        "User":"anonymousTag",
+        "Project": "klaytn",
+        "Team": "unknown"
+      },
       "keyName":"aws.key",
       "subnet": "subnet-3f123456789012345",
       "zone":"ap-northeast-2a"

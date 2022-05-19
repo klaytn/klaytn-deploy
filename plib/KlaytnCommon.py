@@ -199,7 +199,7 @@ def GetTableName(jsonConf, nodeType, nodeIdx):
 			words = initOption.replace("=", " ").split()
 			return False, words[words.index("--db.dynamo.tablename")+1]
 
-	userTag = jsonConf["userInfo"]["aws"]["userTag"]
+	userTag = jsonConf["userInfo"]["aws"]["tags"]["User"]
 	return True, userTag.lower().replace("_", "-").replace("/", "-").replace(" ", "-") + "-" + nodeType.lower() + str(nodeIdx)
 
 # check if the binary can be downloaded. url example: https://github.com/klaytn/klaytn/archive/refs/tags/v1.6.1.tar.gz

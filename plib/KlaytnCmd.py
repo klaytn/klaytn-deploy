@@ -70,7 +70,7 @@ class KlaytnCmd:
 		else:
 			print('The binary cannot be found. Trying building...')
 
-			dockerImageTag = "%s-%s" %(jsonConf["source"]["klaytn"]["dockerImageTag"], jsonConf["userInfo"]["aws"]["userTag"])
+			dockerImageTag = "%s-%s" %(jsonConf["source"]["klaytn"]["dockerImageTag"], jsonConf["userInfo"]["aws"]["tags"]["User"])
 			dockerImageTag = dockerImageTag.lower()
 			dockerBaseImage = jsonConf["source"]["klaytn"]["dockerBaseImage"]
 			build_args.append("DOCKER_BASE_IMAGE=%s" % dockerBaseImage)
@@ -113,7 +113,7 @@ class KlaytnCmd:
 				ExecuteShell("rm -rf bin.tar.gz && rm -rf %s-linux-amd64" % nodeType)
 		else:
 			print("The binary cannot be downloaded. Extracting from docker image..")
-			dockerImageTag = "%s-%s" %(jsonConf["source"]["klaytn"]["dockerImageTag"], jsonConf["userInfo"]["aws"]["userTag"])
+			dockerImageTag = "%s-%s" %(jsonConf["source"]["klaytn"]["dockerImageTag"], jsonConf["userInfo"]["aws"]["tags"]["User"])
 			dockerImageTag = dockerImageTag.lower()
 			dockerPkgPath = jsonConf["source"]["klaytn"]["dockerPkgPath"]
 			ExecuteShell("mkdir -p $(pwd)/%s" % binaryPath)
