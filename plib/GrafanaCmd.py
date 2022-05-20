@@ -164,7 +164,7 @@ class GrafanaCmd:
 			with conn.cursor() as cursor:
 						metrics = self.config["deploy"]["locustMaster"]["performanceTest"]["testResultMetrics"]
 						test_gen_sql = 'INSERT INTO tests (date, aws_user_tag, aws_key_name) VALUES (NOW(), %s, %s)'
-						cursor.execute(test_gen_sql, (self.config["userInfo"]["aws"]["userTag"], self.config["userInfo"]["aws"]["keyName"]))
+						cursor.execute(test_gen_sql, (self.config["userInfo"]["aws"]["tags"]["User"], self.config["userInfo"]["aws"]["keyName"]))
 						conn.commit()
 						test_id = cursor.lastrowid
 						for metric in metrics:

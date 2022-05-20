@@ -31,7 +31,7 @@ class LocustSCCmd:
 
 		ref = jsonConf["source"]["locustSC"]["git"]["ref"]
 		branch = jsonConf["source"]["locustSC"]["git"]["branch"]
-		dockerImageTag = "%s-%s" % (jsonConf["source"]["locustSC"]["dockerImageTag"], jsonConf["userInfo"]["aws"]["userTag"])
+		dockerImageTag = "%s-%s" % (jsonConf["source"]["locustSC"]["dockerImageTag"], jsonConf["userInfo"]["aws"]["tags"]["User"])
 		dockerImageTag = dockerImageTag.lower()
 
 		locustDir = "klaytn-load-tester"
@@ -57,7 +57,7 @@ class LocustSCCmd:
 		if not self.isEnabled(jsonConf):
 			return
 
-		dockerImageTag = "%s-%s" % (jsonConf["source"]["locustSC"]["dockerImageTag"], jsonConf["userInfo"]["aws"]["userTag"])
+		dockerImageTag = "%s-%s" % (jsonConf["source"]["locustSC"]["dockerImageTag"], jsonConf["userInfo"]["aws"]["tags"]["User"])
 		dockerImageTag = dockerImageTag.lower()
 		binaryPath = jsonConf["source"]["locustSC"]["binaryPath"]
 		dockerPkgPath = jsonConf["source"]["locustSC"]["dockerPkgPath"]

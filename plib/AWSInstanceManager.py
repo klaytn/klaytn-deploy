@@ -180,7 +180,7 @@ class AWSInstanceManager:
 		self.terminateNodeInstanceById(nodeId)
 
 	def TerminateAll(self):
-		userTag = self.userInfo["aws"]["userTag"]
+		userTag = self.userInfo["aws"]["tags"]["User"]
 		self.TerminateInstancesByUserTag(userTag)
 
 	def StopInstances(self):
@@ -191,7 +191,7 @@ class AWSInstanceManager:
 		self.stopNodeInstanceById(nodeId)
 
 	def StopInstancesAll(self):
-		userTag = self.userInfo["aws"]["userTag"]
+		userTag = self.userInfo["aws"]["tags"]["User"]
 		self.StopInstancesByUserTag(userTag)
 
 	def StartInstances(self):
@@ -202,7 +202,7 @@ class AWSInstanceManager:
 		self.startNodeInstanceById(nodeId)
 
 	def StartInstancesAll(self):
-		userTag = self.userInfo["aws"]["userTag"]
+		userTag = self.userInfo["aws"]["tags"]["User"]
 		self.StartInstancesByUserTag(userTag)
 
 	def GetIpAddresses(self):
@@ -325,7 +325,7 @@ class AWSInstanceManager:
 		return securityGroup
 
 	def createNodeInstances(self):
-		userTag = self.userInfo["aws"]["userTag"]
+		userTag = self.userInfo["aws"]["tags"]["User"]
 		keyName = self.userInfo["aws"]["keyName"]
 		nodeType = self.nodeType
 		numNodes = self.awsConf["numNodes"]
@@ -334,7 +334,7 @@ class AWSInstanceManager:
 
 	def createNodeInstanceById(self, nodeIdx):
 		self.checkIndex(nodeIdx)
-		userTag = self.userInfo["aws"]["userTag"]
+		userTag = self.userInfo["aws"]["tags"]["User"]
 		keyName = self.userInfo["aws"]["keyName"]
 		nodeType = self.nodeType
 		numNodes = self.awsConf["numNodes"]
@@ -359,10 +359,20 @@ class AWSInstanceManager:
 		self.updatePartition(index, size)
 
 	def createInstance(self, userTag, nodeType, index, keyName):
+		resourceTags = self.userInfo["aws"]["tags"]
+
 		nodeTypeTag, nodeTag, rawNodeTag = self.genTags(userTag, nodeType, index)
-		projectTag = "klaytn"
-		if "projectTag" in self.userInfo["aws"]:
-			projectTag = self.userInfo["aws"]["projectTag"]
+		resourceTags.update({
+			"Name": nodeTag,
+			"NodeType": nodeTypeTag,
+			"Node": nodeTag,
+			"RawNode": rawNodeTag,
+			"ManagedBy": "klaytn-deploy",
+		})
+
+		requiredTags = {"User", "Team", "Project", "ManagedBy"}
+		if not requiredTags <= resourceTags.keys():
+			raise Exception("No required tags; User, Team, Project")
 
 		privateIPs, publicIPs = self.getPrivatePublicIpsById(index)
 		if len(privateIPs) != 0 or len(publicIPs) != 0:
@@ -450,32 +460,7 @@ class AWSInstanceManager:
 			TagSpecifications = [
 				{
 					'ResourceType': 'instance',
-					'Tags':[
-						{
-							'Key': 'Name',
-							'Value': nodeTag,
-						},
-						{
-							'Key': 'User',
-							'Value': userTag,
-						},
-						{
-							'Key': 'NodeType',
-							'Value': nodeTypeTag,
-						},
-						{
-							'Key': 'Node',
-							'Value': nodeTag,
-						},
-						{
-							'Key': 'RawNode',
-							'Value': rawNodeTag,
-						},
-						{
-							'Key': 'Project',
-							'Value': projectTag,
-						}
-					]
+					'Tags':[{'Key': k, 'Value': v} for k, v in resourceTags.items()],
 				}
 			]
 		)
@@ -483,7 +468,7 @@ class AWSInstanceManager:
 		return instances
 
 	def WritePrivatePublicIPs(self):
-		userTag = self.userInfo["aws"]["userTag"]
+		userTag = self.userInfo["aws"]["tags"]["User"]
 		nodeType = self.nodeType
 		numNodes = self.awsConf["numNodes"]
 		for i in range(0, numNodes):
@@ -491,7 +476,7 @@ class AWSInstanceManager:
 
 	def WritePrivatePublicIPsById(self, index):
 		self.checkIndex(index)
-		userTag = self.userInfo["aws"]["userTag"]
+		userTag = self.userInfo["aws"]["tags"]["User"]
 		nodeType = self.nodeType
 		nodeTypeTag, nodeTag, rawNodeTag = self.genTags(userTag, nodeType, index)
 
@@ -519,7 +504,7 @@ class AWSInstanceManager:
 				f.write("%s\n" % p)
 
 	def getPrivatePublicIps(self):
-		userTag = self.userInfo["aws"]["userTag"]
+		userTag = self.userInfo["aws"]["tags"]["User"]
 		nodeType = self.nodeType
 		nodeTypeTag, nodeTag, rawNodeTag = self.genTags(userTag, nodeType, 0)
 		publicIPs = {}
@@ -546,7 +531,7 @@ class AWSInstanceManager:
 
 	def getPrivatePublicIpsById(self, index):
 		self.checkIndex(index)
-		userTag = self.userInfo["aws"]["userTag"]
+		userTag = self.userInfo["aws"]["tags"]["User"]
 		nodeType = self.nodeType
 		nodeTypeTag, nodeTag, rawNodeTag = self.genTags(userTag, nodeType, index)
 		publicIPs = {}
@@ -743,13 +728,13 @@ class AWSInstanceManager:
 
 	def terminateNodeInstances(self):
 		nodeType = self.nodeType
-		userTag = self.userInfo["aws"]["userTag"]
+		userTag = self.userInfo["aws"]["tags"]["User"]
 		nodeTypeTag, nodeTag, rawNodeTag = self.genTags(userTag, nodeType, 0)
 		self.TerminateInstancesByNodeType(nodeTypeTag)
 
 	def terminateNodeInstanceById(self, nodeIdx):
 		nodeType = self.nodeType
-		userTag = self.userInfo["aws"]["userTag"]
+		userTag = self.userInfo["aws"]["tags"]["User"]
 		nodeTypeTag, nodeTag, rawNodeTag = self.genTags(userTag, nodeType, nodeIdx)
 		self.TerminateInstancesByNode(nodeTag)
 
@@ -873,20 +858,20 @@ class AWSInstanceManager:
 
 	def TerminateDynamoDBTableById(self, nodeIdx, config):
 		nodeType = self.nodeType
-		userTag = self.userInfo["aws"]["userTag"]
+		userTag = self.userInfo["aws"]["tags"]["User"]
 		_, tableName = GetTableName(config, nodeType, nodeIdx)
 
 		DeleteDynamoDB().ByName(tableName, self.userInfo["aws"]["zone"][:-1], False)
 
 	def stopNodeInstances(self):
 		nodeType = self.nodeType
-		userTag = self.userInfo["aws"]["userTag"]
+		userTag = self.userInfo["aws"]["tags"]["User"]
 		nodeTypeTag, nodeTag, rawNodeTag = self.genTags(userTag, nodeType, 0)
 		self.StopInstancesByNodeType(nodeTypeTag)
 
 	def stopNodeInstanceById(self, nodeIdx):
 		nodeType = self.nodeType
-		userTag = self.userInfo["aws"]["userTag"]
+		userTag = self.userInfo["aws"]["tags"]["User"]
 		nodeTypeTag, nodeTag, rawNodeTag = self.genTags(userTag, nodeType, nodeIdx)
 		self.StopInstancesByNode(nodeTag)
 
@@ -979,13 +964,13 @@ class AWSInstanceManager:
 
 	def startNodeInstances(self):
 		nodeType = self.nodeType
-		userTag = self.userInfo["aws"]["userTag"]
+		userTag = self.userInfo["aws"]["tags"]["User"]
 		nodeTypeTag, nodeTag, rawNodeTag = self.genTags(userTag, nodeType, 0)
 		self.StartInstancesByNodeType(nodeTypeTag)
 
 	def startNodeInstanceById(self, nodeIdx):
 		nodeType = self.nodeType
-		userTag = self.userInfo["aws"]["userTag"]
+		userTag = self.userInfo["aws"]["tags"]["User"]
 		nodeTypeTag, nodeTag, rawNodeTag = self.genTags(userTag, nodeType, nodeIdx)
 		self.StartInstancesByNode(nodeTag)
 
@@ -993,7 +978,7 @@ class AWSInstanceManager:
 		if disableAws == True:
 			return
 
-		userTag = self.userInfo["aws"]["userTag"]
+		userTag = self.userInfo["aws"]["tags"]["User"]
 		nodeType = self.nodeType
 		nodeTypeTag, nodeTag, rawNodeTag = self.genTags(userTag, nodeType, index)
 		response = self.gatherInstancesByNode(nodeTag)

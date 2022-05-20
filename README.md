@@ -71,11 +71,14 @@ You **should modify** `userInfo` parts.
         "keyPath": "$HOME/.ssh/sample.key.pem", ---(1) pem file location
         "NETWORK_ID": 8888,   ---------------------(2) klaytn private network id you want to deploy
         "aws":{
-            "userTag": "klaytn-test", -------------(3) aws user tag you want to use
-            "projectTag": "klaytn", ---------------(4) aws project tag you want to use
-            "keyName": "sample.key", --------------(5) pem file name
-            "subnet": "subnet-0a0a0a0a0a0a0a0a0", -(6) write your aws subnet-id
-            "zone": "ap-northeast-2a" -------------(7) aws zone you want to use as a dafault
+            "tags": {
+                "User": "klaytn-test", -------------(3) aws user tag you want to use
+                "Project": "klaytn", ---------------(4) aws project tag you want to use
+                "Team": "klaytn" -------------------(5) aws project tag you want to use
+            },
+            "keyName": "sample.key", --------------(6) pem file name
+            "subnet": "subnet-0a0a0a0a0a0a0a0a0", -(7) write your aws subnet-id
+            "zone": "ap-northeast-2a" -------------(8) aws zone you want to use as a dafault
         }
     }
 ```
