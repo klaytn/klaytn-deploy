@@ -370,6 +370,18 @@
         "storage":{"DeviceName":"/dev/xvda","VolumeSize":16},
         "userName":"ec2-user"
       }
+    },
+    "graylog": {
+      "enabled": false,
+      "inputPort": 5555,
+      "aws": {
+        "numNodes": 1,
+        "instanceType": "m5.large",
+        "imageId": "ami-0454bb2fefc7de534",
+        "storage": { "DeviceName": "/dev/sda1", "VolumeSize": 50},
+        "securityGroup": ["sg-0abcdefghijklmnop"],
+        "userName": "ubuntu"
+      }
     }
   },
   "topology":"baobab"
