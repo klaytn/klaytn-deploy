@@ -1,7 +1,7 @@
 #/bin/sh
 
 if [ ! -d "token-manager" ]; then
-  git clone -b dev-platform-test-tool git@github.com:Krustuniverse-Klaytn-Group/token-manager.git
+  git clone -b platform git@github.com:Krustuniverse-Klaytn-Group/token-manager.git
   mkdir token-manager/data
   cd token-manager/platform
   npm i
