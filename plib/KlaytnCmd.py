@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import platform
 import json
 import urllib.request
 import sys
@@ -117,8 +118,11 @@ class KlaytnCmd:
 			dockerImageTag = dockerImageTag.lower()
 			dockerPkgPath = jsonConf["source"]["klaytn"]["dockerPkgPath"]
 			ExecuteShell("mkdir -p $(pwd)/%s" % binaryPath)
-			ExecuteShell("docker run --rm -u $(id -u):$(id -g) -v $(pwd)/%s:/tmp1 %s bash -c 'cp -r %s/* /tmp1'" %
-				(binaryPath, dockerImageTag, dockerPkgPath))
+			docker_run_platform = ""
+			if platform.machine() == "arm64":
+				docker_run_platform = "--platform linux/amd64"
+			ExecuteShell("docker run %s --rm -u $(id -u):$(id -g) -v $(pwd)/%s:/tmp1 %s bash -c 'cp -r %s/* /tmp1'" %
+				(docker_run_platform, binaryPath, dockerImageTag, dockerPkgPath))
 
 	def genesis(self, args):
 		jsonConf = LoadConfig(args.conf)

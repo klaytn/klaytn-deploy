@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import platform
 
 from LocustSCMasterCmd import LocustSCMasterCmd
 from LocustSCSlaveCmd import LocustSCSlaveCmd
@@ -48,8 +49,8 @@ class LocustSCCmd:
 
 		if os.path.exists("%s/%s" % (locustDir, klaytnDir)) == False:
 			ExecuteShell("cd %s && git clone %s" % (locustDir, klaytnRef))
-		ExecuteShell("cd %s/%s && git checkout master && git fetch -f %s %s:build && git checkout build" % (locustDir, klaytnDir, klaytnRef, klaytnBranch))
-		ExecuteShell("cd %s && git checkout master && git fetch -f %s %s:build && git checkout build  && docker build -f DockerfileSC -t %s ." % (locustDir, ref, branch, dockerImageTag))
+		ExecuteShell("cd %s/%s && git checkout master && git fetch -f %s %s && git checkout %s && git checkout -B build" % (locustDir, klaytnDir, klaytnRef, klaytnBranch, klaytnBranch))
+		ExecuteShell("cd %s && git checkout master && git fetch -f %s %s && git checkout %s  && git checkout -B build  && docker build -t %s ." % (locustDir, ref, branch, branch, dockerImageTag))
 
 	def extract(self, args):
 		jsonConf = LoadConfig(args.conf)
@@ -63,5 +64,9 @@ class LocustSCCmd:
 		dockerPkgPath = jsonConf["source"]["locustSC"]["dockerPkgPath"]
 
 		ExecuteShell("mkdir -p %s" % binaryPath)
-		ExecuteShell("docker run --rm -v $(pwd)/%s:/tmp1 %s bash -c 'cp -r %s/* /tmp1'" %
-			(binaryPath, dockerImageTag, dockerPkgPath))
+
+		docker_run_platform = ""
+		if platform.machine() == "arm64":
+			docker_run_platform = "--platform linux/amd64"
+		ExecuteShell("docker run %s --rm -v $(pwd)/%s:/tmp1 %s bash -c 'cp -r %s/* /tmp1'" %
+			(docker_run_platform, binaryPath, dockerImageTag, dockerPkgPath))
