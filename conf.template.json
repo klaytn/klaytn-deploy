@@ -40,11 +40,11 @@
     },
     "locustSC":{
       "dockerImageTag":"klaytn-deploy-locustSC",
-      "dockerPkgPath":"/locustSC-docker-pkg",
+      "dockerPkgPath":"/locust-docker-pkg",
       "binaryPath":"locustSC_bin",
       "git":{
         "ref":"git@github.com:klaytn/klaytn-load-tester.git",
-        "branch":"service_chain_node_test"
+        "branch":"sc_nodetest"
       }
     },
     "tokenManager":{
@@ -168,8 +168,8 @@
       "enabled": false,
       "bridges": {
         "mainBridge": "EN",
-        "subBridge": "SEN",
-        "num": 0
+        "subBridge": "SCN",
+        "num": 1
       },
       "anchoring": {
         "SC_ANCHORING": 1,
@@ -356,12 +356,14 @@
     "locustSCSlave": {
       "enabled":false,
       "RPS": 100,
-      "_endpoints":["Select CN/EN/PN or http://{IP}:{Port}. You don't need to write SCN."],
-      "endpoints":["EN"],
+      "_endpoints":["Select CN/EN/PN or http://{IP}:{Port}. You need to write SCN/SPN/SEN too."],
+      "endpoints":["EN","SCN"],
       "_testcases":["scKLAYTransferTc,scTokenTransferTc,scNFTTransferTc"],
       "testcases":["scKLAYTransferTc"],
       "_numAccForSignedTx": 100,
-      "slavesPerNode":2,
+      "numAccForMcUsers": 50,
+      "numAccForScUsers": 50,
+      "slavesPerNode":1,
       "aws":{
         "numNodes":1,
         "instanceType":"m5.large",
