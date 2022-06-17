@@ -160,7 +160,7 @@ class LocustSCSlaveInstanceManager(AWSInstanceManager):
 				scKey = scKeys[idx % len(scKeys)]
 				mcEndpoint = mcEndpoints[idx % len(mcEndpoints)]
 				scEndpoint = scEndpoints[idx % len(scEndpoints)]
-				self.execute([hosts[i-startNodeId]], "nohup bash -c \'./%s/bin/klayslave --max-rps %s --nUser=%s --nUserSc=%s --master-host %s --master-port 5557 -threshold %d -mcKey %s -scKey %s -tc=\"%s\" -mcEndpoint http://%s -mcIP %s -scEndpoint http://%s > %s/slave-%s.%d.log 2>&1 -subbridges %s &\'" % (self.nodeType, eachRps, numMcUsers, numScUsers, masterIp, threshold, mcKey, scKey, tc, mcEndpoint, enIp, scEndpoint, self.nodeType, mcKey, j, subBridgeEndpoints))
+				self.execute([hosts[i-startNodeId]], "nohup bash -c \'./%s/bin/klayslave --max-rps %s --numUser=%s --numScUser=%s --master-host %s --master-port 5557 -threshold %d -mcKey %s -scKey %s -tc=\"%s\" -mcEndpoint http://%s -mcIP %s -scEndpoint http://%s > %s/slave-%s.%d.log 2>&1 -subbridges %s &\'" % (self.nodeType, eachRps, numMcUsers, numScUsers, masterIp, threshold, mcKey, scKey, tc, mcEndpoint, enIp, scEndpoint, self.nodeType, mcKey, j, subBridgeEndpoints))
 
 	def Stop(self):
 		hosts = self.GetPublicIPAddresses()
