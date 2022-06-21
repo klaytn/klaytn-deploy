@@ -73,7 +73,7 @@ class LocustMasterInstanceManager(AWSInstanceManager):
 			numSlaves = self.jsonConf["deploy"]["locustSlave"]["slavesPerNode"]
 			print ("- numSlaves: %s" % numSlaves)
 
-			additional_params = "--no-web --only-summary -c %d -r %d --run-time %s --expect-slaves=%d" % (users,hatchRate,runTime,numNodes * numSlaves)
+			additional_params = "--headless --only-summary -u %d -r %d --run-time %s --expect-workers=%d" % (users,hatchRate,runTime,numNodes * numSlaves)
 
 		self.execute(hosts, "nohup bash -c \'~/.local/bin/locust -f %s/locustfile.py --master %s > %s/master.log 2>&1 &\'" % (remoteDir,additional_params,remoteDir))
 
