@@ -102,6 +102,7 @@ class LocustSlaveInstanceManager(AWSInstanceManager):
 		eachRps = int(self.jsonConf["deploy"][self.nodeType]["RPS"] / numNodes / numSlaves)
 		eachNumAccForSignedTx = int(self.jsonConf["deploy"][self.nodeType]["numAccForSignedTx"] / numNodes / numSlaves)
 		activeAccPercent = int(self.jsonConf["deploy"][self.nodeType]["activeAccPercent"])
+		chargeKLAY = ""
 
 		endpoints = []
 		testServiceChain = False
@@ -124,6 +125,9 @@ class LocustSlaveInstanceManager(AWSInstanceManager):
 		else:
 			parentPrivateKeys = self.getTestKeysForLocust("cn")
 
+		if "overrideCharge" in self.jsonConf["deploy"][self.nodeType]:
+			chargeKLAY = "-charge " + str(self.jsonConf["deploy"][self.nodeType]["overrideCharge"])
+
 		if testServiceChain:
 			childPrivateKeys = self.getTestKeysForLocust("scn")
 
@@ -139,7 +143,7 @@ class LocustSlaveInstanceManager(AWSInstanceManager):
 				else:
 					key = parentPrivateKeys[idx % len(parentPrivateKeys)]
 				endpoint = endpoints[idx % len(endpoints)][1]
-				self.execute([hosts[i-startNodeId]], "nohup bash -c \'./%s/bin/klayslave --max-rps %s --vusigned=%s --activepercent=%s --master-host %s --master-port 5557 -key %s -tc=\"%s\" -endpoint http://%s > %s/slave-%s.%d.log 2>&1 &\'" % (self.nodeType, eachRps, eachNumAccForSignedTx, activeAccPercent, masterIp, key, tc, endpoint, self.nodeType, key, j))
+				self.execute([hosts[i-startNodeId]], "nohup bash -c \'./%s/bin/klayslave --max-rps %s --vusigned=%s --activepercent=%s --master-host %s --master-port 5557 -key %s -tc=\"%s\" %s -endpoint http://%s > %s/slave-%s.%d.log 2>&1 &\'" % (self.nodeType, eachRps, eachNumAccForSignedTx, activeAccPercent, masterIp, key, tc, chargeKLAY, endpoint, self.nodeType, key, j))
 
 	def Stop(self):
 		hosts = self.GetPublicIPAddresses()
