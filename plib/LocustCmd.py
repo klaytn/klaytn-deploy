@@ -34,6 +34,7 @@ class LocustCmd:
 		branch = jsonConf["source"]["locust"]["git"]["branch"]
 		dockerImageTag = "%s-%s" % (jsonConf["source"]["locust"]["dockerImageTag"], jsonConf["userInfo"]["aws"]["tags"]["User"])
 		dockerImageTag = dockerImageTag.lower()
+		dockerBaseImage = jsonConf["source"]["locust"]["dockerBaseImage"]
 
 		locustDir = "klaytn-load-tester"
 
@@ -50,7 +51,16 @@ class LocustCmd:
 		if os.path.exists("%s/%s" % (locustDir, klaytnDir)) == False:
 			ExecuteShell("cd %s && git clone %s" % (locustDir, klaytnRef))
 		ExecuteShell("cd %s/%s && git checkout master && git fetch -f %s %s && git checkout %s && git checkout -B build" % (locustDir, klaytnDir, klaytnRef, klaytnBranch, klaytnBranch))
-		ExecuteShell("cd %s && git checkout master && git fetch -f %s %s && git checkout %s  && git checkout -B build  && docker build -t %s ." % (locustDir, ref, branch, branch, dockerImageTag))
+
+		build_args = []
+		build_args.append("DOCKER_BASE_IMAGE=%s" % dockerBaseImage)
+		flatten_build_args = ""
+		if len(build_args) > 0:
+			flatten_build_args = "--build-arg " + " --build-arg ".join(build_args)
+		print("using base docker image: ", dockerBaseImage)
+		print("docker build %s --no-cache -t %s ." % (flatten_build_args, dockerImageTag))
+		ExecuteShell("cd %s && git checkout master && git fetch -f %s %s && git checkout %s && git checkout -B build && docker build %s --no-cache -t %s ." %
+					 (locustDir, ref, branch, branch, flatten_build_args, dockerImageTag))
 
 		if jsonConf["deploy"]["locustSlave"]["enabledEthTest"] == True:
 			ExecuteShell("cd %s/klayslave && git submodule init && git submodule update && cd ethTxGenerator && env GOOS=linux GOARCH=amd64 go build -v" % (locustDir))
