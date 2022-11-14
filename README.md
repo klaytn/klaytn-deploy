@@ -1,3 +1,8 @@
+# Branch name will be changed
+
+We will change the `master` branch to `main` at Nov 1, 2022.
+After change branch policy, please check your local or forked repository settings.
+
 # Klaytn-Deploy
 A Tool for klaytn node deployment.
 * The klaytn node is deployed on AWS EC2 machine.
