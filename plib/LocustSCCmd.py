@@ -49,8 +49,8 @@ class LocustSCCmd:
 
 		if os.path.exists("%s/%s" % (locustDir, klaytnDir)) == False:
 			ExecuteShell("cd %s && git clone %s" % (locustDir, klaytnRef))
-		ExecuteShell("cd %s/%s && git checkout master && git fetch -f %s %s && git checkout %s && git checkout -B build" % (locustDir, klaytnDir, klaytnRef, klaytnBranch, klaytnBranch))
-		ExecuteShell("cd %s && git checkout master && git fetch -f %s %s && git checkout %s  && git checkout -B build  && docker build -t %s ." % (locustDir, ref, branch, branch, dockerImageTag))
+		ExecuteShell("cd %s/%s && git checkout dev && git fetch -f %s %s && git checkout %s && git checkout -B build" % (locustDir, klaytnDir, klaytnRef, klaytnBranch, klaytnBranch))
+		ExecuteShell("cd %s && git checkout main && git fetch -f %s %s && git checkout %s  && git checkout -B build  && docker build -t %s ." % (locustDir, ref, branch, branch, dockerImageTag))
 
 	def extract(self, args):
 		jsonConf = LoadConfig(args.conf)

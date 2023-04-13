@@ -17,6 +17,7 @@ service-chain
 # Editors
 **/.*.sw*
 .idea
+.DS_Store
 
 # Virtualenvs
 .env
