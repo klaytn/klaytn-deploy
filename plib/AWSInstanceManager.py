@@ -443,7 +443,9 @@ class AWSInstanceManager:
 					'Ebs': {
 						'Encrypted': False,
 						'DeleteOnTermination': True,
-						'VolumeType': 'gp2',
+						'VolumeType': self.userInfo["aws"]["storageType"],
+						'Iops': self.awsConf["storage"]["Iops"],
+						'Throughput': self.awsConf["storage"]["Throughput"],
 						'VolumeSize': self.awsConf["storage"]["VolumeSize"] if "VolumeSize" in self.awsConf["storage"] else 1000, # 1T in default
 					}
 				}
@@ -1132,7 +1134,7 @@ class AWSInstanceManager:
 		# if the library is not installed, install the library.
 		if "locust" in command:
 			target_library = "locust"
-			install_cmd = "sudo yum install python3-devel gcc -y > /dev/null \
+			install_cmd = "sudo yum install python3 python3-pip gcc -y > /dev/null \
 			&& pip3 install --user web3 locust==1.2.3 > /dev/null"
 		elif "prometheus" in command:
 			target_library = "prometheus"

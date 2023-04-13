@@ -10,7 +10,8 @@
       },
       "keyName":"aws.key",
       "subnet": "subnet-3f123456789012345",
-      "zone":"ap-northeast-2a"
+      "zone":"ap-northeast-2a",
+      "storageType": "gp3"
     }
   },
   "source":{
@@ -37,7 +38,7 @@
       "dockerBaseImage":"klaytn/build_base:1.1-go1.15.7-solc0.4.24",
       "git":{
         "ref":"git@github.com:klaytn/klaytn-load-tester.git",
-        "branch":"master"
+        "branch":"main"
       }
     },
     "locustSC":{
@@ -65,11 +66,11 @@
     "CN": {
       "aws":{
         "numNodes":0,
-        "instanceType":"m5.large",
-        "securityGroup": ["sg-0abcdefghijklmnop"],
+        "instanceType":"m6i.large",
         "imageId":"ami-0454bb2fefc7de534",
-        "storage":{"DeviceName":"/dev/sda1","VolumeSize":150},
+        "storage":{"DeviceName":"/dev/sda1", "VolumeSize":150, "Iops":9000, "Throughput":500},
         "userName":"ubuntu",
+        "securityGroup":["sg-0abcdefghijklmnop"],
         "_imageIds":[
           "ami-0454bb2fefc7de534",
           "ami-0750a20e9959e44ff",
@@ -100,11 +101,11 @@
     "PN": {
       "aws":{
         "numNodes":0,
-        "instanceType":"m5.large",
-        "securityGroup": ["sg-0abcdefghijklmnop"],
+        "instanceType":"m6i.large",
         "imageId":"ami-0454bb2fefc7de534",
-        "storage":{"DeviceName":"/dev/sda1","VolumeSize":150},
-        "userName":"ubuntu"
+        "storage":{"DeviceName":"/dev/sda1", "VolumeSize":150, "Iops":9000, "Throughput":500},
+        "userName":"ubuntu",
+        "securityGroup":["sg-0abcdefghijklmnop"]
       },
       "initOption":"",
       "overrideOptions":{
@@ -115,11 +116,11 @@
     "EN": {
       "aws":{
         "numNodes":1,
-        "instanceType":"m5.large",
-        "securityGroup":["sg-0abcdefghijklmnop"],
+        "instanceType":"r6i.large",
         "imageId":"ami-0e020234234283491",
-        "storage":{"DeviceName":"/dev/sda1","VolumeSize":4000},
-        "userName":"ubuntu"
+        "storage":{"DeviceName":"/dev/sda1", "VolumeSize":150, "Iops":9000, "Throughput":500},
+        "userName":"ubuntu",
+        "securityGroup":["sg-0abcdefghijklmnop"]
       },
       "initOption":"",
       "overrideOptions":{
@@ -137,9 +138,9 @@
       "aws": {
         "numNodes":1,
         "instanceType":"t3.small",
-        "userName":"ubuntu",
         "imageId":"ami-0454bb2fefc7de534",
-        "storage":{"DeviceName":"/dev/sda1","VolumeSize":50},
+        "storage":{"DeviceName":"/dev/sda1", "VolumeSize":50, "Iops":3000, "Throughput":250},
+        "userName":"ubuntu",
         "securityGroup": ["sg-0abcdefghijklmnop"]
       },
       "overrideOptions":{
@@ -154,9 +155,9 @@
       "aws": {
         "numNodes":1,
         "instanceType":"t3.small",
-        "userName":"ubuntu",
         "imageId":"ami-0454bb2fefc7de534",
-        "storage":{"DeviceName":"/dev/sda1","VolumeSize":50},
+        "storage":{"DeviceName":"/dev/sda1", "VolumeSize":50, "Iops":3000, "Throughput":250},
+        "userName":"ubuntu",
         "securityGroup": ["sg-0abcdefghijklmnop"]
       },
       "overrideOptions":{
@@ -170,7 +171,7 @@
       "bridges": {
         "mainBridge": "EN",
         "subBridge": "SCN",
-        "num": 1
+        "num": 0
       },
       "anchoring": {
         "SC_ANCHORING": 1,
@@ -184,10 +185,10 @@
     "SCN": {
       "aws":{
         "numNodes":0,
-        "instanceType":"m5.large",
-        "userName":"ubuntu",
+        "instanceType":"m6i.large",
         "imageId":"ami-0454bb2fefc7de534",
-        "storage":{"DeviceName":"/dev/sda1","VolumeSize":150},
+        "storage":{"DeviceName":"/dev/sda1", "VolumeSize":150, "Iops":9000, "Throughput":500},
+        "userName":"ubuntu",
         "securityGroup": ["sg-0abcdefghijklmnop"]
       },
       "initOption":"",
@@ -200,10 +201,10 @@
     "SPN": {
       "aws":{
         "numNodes":0,
-        "instanceType":"m5.large",
-        "userName":"ubuntu",
+        "instanceType":"m6i.large",
         "imageId":"ami-0454bb2fefc7de534",
-        "storage":{"DeviceName":"/dev/sda1","VolumeSize":150},
+        "storage":{"DeviceName":"/dev/sda1", "VolumeSize":150, "Iops":9000, "Throughput":500},
+        "userName":"ubuntu",
         "securityGroup": ["sg-0abcdefghijklmnop"]
       },
       "initOption":"",
@@ -216,10 +217,10 @@
     "SEN": {
       "aws":{
         "numNodes":0,
-        "instanceType":"m5.large",
-        "userName":"ubuntu",
+        "instanceType":"r6i.large",
         "imageId":"ami-0454bb2fefc7de534",
-        "storage":{"DeviceName":"/dev/sda1","VolumeSize":150},
+        "storage":{"DeviceName":"/dev/sda1", "VolumeSize":150, "Iops":9000, "Throughput":500},
+        "userName":"ubuntu",
         "securityGroup": ["sg-0abcdefghijklmnop"]
       },
       "initOption":"",
@@ -234,11 +235,11 @@
       "prometheusPort":61001,
       "aws": {
         "numNodes":1,
-        "imageId":"ami-033a6a056910d1137",
-        "instanceType":"m5.large",
-        "securityGroup": ["sg-0abcdefghijklmnop"],
-        "storage":{"DeviceName":"/dev/xvda","VolumeSize":8},
-        "userName":"ec2-user"
+        "instanceType":"m6i.large",
+        "imageId":"ami-0676d41f079015f32",
+        "storage":{"DeviceName":"/dev/xvda", "VolumeSize":8, "Iops":3000, "Throughput":250},
+        "userName":"ec2-user",
+        "securityGroup": ["sg-0abcdefghijklmnop"]
       }
     },
     "locustMaster":{
@@ -271,11 +272,11 @@
       },
       "aws":{
         "numNodes":1,
-        "instanceType":"m5.large",
-        "imageId":"ami-033a6a056910d1137",
-        "securityGroup": ["sg-0abcdefghijklmnop"],
-        "storage":{"DeviceName":"/dev/xvda","VolumeSize":16},
-        "userName":"ec2-user"
+        "instanceType":"m6i.large",
+        "imageId":"ami-0676d41f079015f32",
+        "storage":{"DeviceName":"/dev/xvda", "VolumeSize":16, "Iops":3000, "Throughput":250},
+        "userName":"ec2-user",
+        "securityGroup": ["sg-0abcdefghijklmnop"]
       }
     },
     "locustSlave": {
@@ -337,22 +338,22 @@
       "_overrideKeys":[],
       "aws":{
         "numNodes":1,
-        "instanceType":"m5.large",
-        "imageId":"ami-033a6a056910d1137",
-        "securityGroup": ["sg-0abcdefghijklmnop"],
-        "storage":{"DeviceName":"/dev/xvda","VolumeSize":16},
-        "userName":"ec2-user"
+        "instanceType":"m6i.large",
+        "imageId":"ami-0676d41f079015f32",
+        "storage":{"DeviceName":"/dev/xvda", "VolumeSize":16, "Iops":3000, "Throughput":250},
+        "userName":"ec2-user",
+        "securityGroup": ["sg-0abcdefghijklmnop"]
       }
     },
     "locustSCMaster":{
       "enabled":false,
       "aws":{
         "numNodes":1,
-        "instanceType":"m5.large",
-        "imageId":"ami-033a6a056910d1137",
-        "securityGroup": ["sg-0abcdefghijklmnop"],
-        "storage":{"DeviceName":"/dev/xvda","VolumeSize":16},
-        "userName":"ec2-user"
+        "instanceType":"m6i.large",
+        "imageId":"ami-0676d41f079015f32",
+        "storage":{"DeviceName":"/dev/xvda", "VolumeSize":16, "Iops":3000, "Throughput":250},
+        "userName":"ec2-user",
+        "securityGroup": ["sg-0abcdefghijklmnop"]
       }
     },
     "locustSCSlave": {
@@ -368,23 +369,23 @@
       "slavesPerNode":1,
       "aws":{
         "numNodes":1,
-        "instanceType":"m5.large",
-        "imageId":"ami-033a6a056910d1137",
-        "securityGroup": ["sg-0abcdefghijklmnop"],
-        "storage":{"DeviceName":"/dev/xvda","VolumeSize":16},
-        "userName":"ec2-user"
+        "instanceType":"m6i.large",
+        "imageId":"ami-0676d41f079015f32",
+        "storage":{"DeviceName":"/dev/xvda", "VolumeSize":16, "Iops":3000, "Throughput":250},
+        "userName":"ec2-user",
+        "securityGroup": ["sg-0abcdefghijklmnop"]
       }
     },
-    "graylog": {
-      "enabled": false,
-      "inputPort": 5555,
-      "aws": {
-        "numNodes": 1,
-        "instanceType": "m5.large",
-        "imageId": "ami-0454bb2fefc7de534",
-        "storage": { "DeviceName": "/dev/sda1", "VolumeSize": 50},
-        "securityGroup": ["sg-0abcdefghijklmnop"],
-        "userName": "ubuntu"
+    "graylog":{
+      "enabled":false,
+      "inputPort":5555,
+      "aws":{
+        "numNodes":1,
+        "instanceType":"m6i.large",
+        "imageId":"ami-0454bb2fefc7de534",
+        "storage":{"DeviceName":"/dev/sda1", "VolumeSize":50, "Iops":3000, "Throughput":250},
+        "userName":"ubuntu",
+        "securityGroup": ["sg-0abcdefghijklmnop"]
       }
     }
   },

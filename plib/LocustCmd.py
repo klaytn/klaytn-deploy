@@ -57,10 +57,17 @@ class LocustCmd:
 		flatten_build_args = ""
 		if len(build_args) > 0:
 			flatten_build_args = "--build-arg " + " --build-arg ".join(build_args)
+		# This docker build works only with the linux/amd64 locust slave machine
+		# Without this, the binary extracted from the docker failed because of the format mismatch
+		# TODO: make the binary compatible with every os type
+		docker_run_platform = ""
+		if platform.machine() == "arm64":
+			docker_run_platform = "--platform linux/amd64"
 		print("using base docker image: ", dockerBaseImage)
-		print("docker build %s --no-cache -t %s ." % (flatten_build_args, dockerImageTag))
-		ExecuteShell("cd %s && git checkout master && git fetch -f %s %s && git checkout %s && git checkout -B build && docker build %s --no-cache -t %s ." %
-					 (locustDir, ref, branch, branch, flatten_build_args, dockerImageTag))
+		print("docker build %s --no-cache %s -t %s ." % (flatten_build_args, docker_run_platform, dockerImageTag))
+
+		ExecuteShell("cd %s && git checkout main && git fetch -f %s %s && git checkout %s && git checkout -B build && docker build %s --no-cache %s -t %s ." %
+					 (locustDir, ref, branch, branch, flatten_build_args, docker_run_platform, dockerImageTag))
 
 		if jsonConf["deploy"]["locustSlave"]["enabledEthTest"] == True:
 			ExecuteShell("cd %s/klayslave && git submodule init && git submodule update && cd ethTxGenerator && env GOOS=linux GOARCH=amd64 go build -v" % (locustDir))

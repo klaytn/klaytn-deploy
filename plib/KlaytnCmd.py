@@ -81,7 +81,7 @@ class KlaytnCmd:
 				flatten_build_args = "--build-arg " + " --build-arg ".join(build_args)
 			print("using base docker image: ", dockerBaseImage)
 			print("docker build %s --no-cache -t %s ." % (flatten_build_args, dockerImageTag))
-			ExecuteShell("cd %s && git checkout master && git fetch -f %s %s && git checkout %s && git checkout -B build && docker build %s --no-cache -t %s ." %
+			ExecuteShell("cd %s && git checkout dev && git fetch -f %s %s && git checkout %s && git checkout -B build && docker build %s --no-cache -t %s ." %
 					(klaytnDir, ref, branch, branch, flatten_build_args, dockerImageTag))
 
 	def extract(self, args):
