@@ -9,8 +9,8 @@ pushd $DIR/../.. &> /dev/null
 # Setup phase
 id=0
 num=$(./deploy cn jsexec --id $id "klay.getCouncilSize()")
-epoch=$(./deploy cn jsexec --id $id "governance.itemsAt()" | grep "istanbul.epoch" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
-govmode=$(./deploy cn jsexec --id $id "governance.itemsAt()" | grep "governance.governancemode" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
+epoch=$(./deploy cn jsexec --id $id "governance.getParams()" | grep "istanbul.epoch" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
+govmode=$(./deploy cn jsexec --id $id "governance.getParams()" | grep "governance.governancemode" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
 blk=$(./deploy cn jsexec --id $id "klay.blockNumber")
 epochIdx=$((blk / epoch))
 
@@ -24,7 +24,7 @@ if [ ${govmode} == "\"ballot\"" ]; then
   sleep ${wait}
   echo
   # Check if the governancemode has changed
-  govmode=$(./deploy cn jsexec --id $id "governance.itemsAt()" | grep "governance.governancemode" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
+  govmode=$(./deploy cn jsexec --id $id "governance.getParams()" | grep "governance.governancemode" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
   if [ ${govmode} == "\"single\"" ]; then
     echo "Governancemode has changed successfully"
     echo
@@ -48,7 +48,7 @@ fi
 
 
 # Get new governancemode value
-newgovernancemode=$(./deploy cn jsexec --id $id "governance.itemsAt()" | grep "governance.governancemode" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
+newgovernancemode=$(./deploy cn jsexec --id $id "governance.getParams()" | grep "governance.governancemode" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
 if [ $newgovernancemode == "\"single\"" ]; then 
   newgovernancemode="none"
 else 
@@ -56,7 +56,7 @@ else
 fi
 
 # Get new mintingamount value
-newmintingamount=$(./deploy cn jsexec --id $id "governance.itemsAt()" | grep "reward.mintingamount" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
+newmintingamount=$(./deploy cn jsexec --id $id "governance.getParams()" | grep "reward.mintingamount" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
 if [ $newmintingamount == "\"9600000000000000000\"" ]; then 
   newmintingamount="1000000000000000000"
 else 
@@ -64,7 +64,7 @@ else
 fi
 
 # Get new ratio
-newratio=$(./deploy cn jsexec --id $id "governance.itemsAt()" | grep "reward.ratio" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
+newratio=$(./deploy cn jsexec --id $id "governance.getParams()" | grep "reward.ratio" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
 if [ $newratio == "\"34/54/12\"" ]; then 
   newratio="100/0/0"
 else 
@@ -72,7 +72,7 @@ else
 fi
 
 # Get new minimumstake
-newminimumstake=$(./deploy cn jsexec --id $id "governance.itemsAt()" | grep "reward.minimumstake" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
+newminimumstake=$(./deploy cn jsexec --id $id "governance.getParams()" | grep "reward.minimumstake" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
 if [ $newminimumstake == "\"5000000\"" ]; then 
   newminimumstake="2500000"
 else 
@@ -80,7 +80,7 @@ else
 fi
 
 # Get new unitprice
-newunitprice=$(./deploy cn jsexec --id $id "governance.itemsAt()" | grep "governance.unitprice" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
+newunitprice=$(./deploy cn jsexec --id $id "governance.getParams()" | grep "governance.unitprice" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
 if [ $newunitprice == 25000000000 ]; then 
   newunitprice=10000000000
 else 
@@ -88,7 +88,7 @@ else
 fi
 
 # Get new committeesize
-newcommitteesize=$(./deploy cn jsexec --id $id "governance.itemsAt()" | grep "istanbul.committeesize" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
+newcommitteesize=$(./deploy cn jsexec --id $id "governance.getParams()" | grep "istanbul.committeesize" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
 if [ $newcommitteesize == 13 ]; then 
   newcommitteesize=31
 else 
@@ -104,7 +104,7 @@ else
 fi
 
 # Get deferredtxfee
-newdeferredtxfee=$(./deploy cn jsexec --id $id "governance.itemsAt()" | grep "reward.deferredtxfee" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
+newdeferredtxfee=$(./deploy cn jsexec --id $id "governance.getParams()" | grep "reward.deferredtxfee" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
 if [ $newdeferredtxfee == false ]; then 
   newdeferredtxfee=true
 else 
@@ -112,7 +112,7 @@ else
 fi
 
 # Get new useginicoeff
-newuseginicoeff=$(./deploy cn jsexec --id $id "governance.itemsAt()" | grep "reward.useginicoeff" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
+newuseginicoeff=$(./deploy cn jsexec --id $id "governance.getParams()" | grep "reward.useginicoeff" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
 if [ $newuseginicoeff == false ]; then 
   newuseginicoeff=true
 else 
@@ -162,7 +162,7 @@ sleep ${waiting}
 # validation for string values
 for (( i=0; i<=(( $total -1 )); i++ ))
 do
-  c=$(./deploy cn jsexec --id $id "governance.itemsAt()" | grep "${keys[$i]}" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
+  c=$(./deploy cn jsexec --id $id "governance.getParams()" | grep "${keys[$i]}" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
   if [ \"${values[$i]}\" != $c ]; then
     echo "Test failed!!! Want: ${values[$i]}, Have: ${c}"
     exit 1
@@ -172,7 +172,7 @@ done
 # validation for uint/bool values
 for (( i=0; i<=(( $utotal -1 )); i++ ))
 do
-  c=$(./deploy cn jsexec --id $id "governance.itemsAt()" | grep "${ukeys[$i]}" | awk -F":" '{print $2}' | awk -F"," '{print $1}' | sed -e 's/^ *//g' -e 's/ *$//g')
+  c=$(./deploy cn jsexec --id $id "governance.getParams()" | grep "${ukeys[$i]}" | awk -F":" '{print $2}' | awk -F"," '{print $1}' | sed -e 's/^ *//g' -e 's/ *$//g')
   if [ ${uvalues[${i}]} != ${c} ]; then
     echo "Test failed!!! Want: ${uvalues[$i]}, Have: ${c}"
     exit 1
