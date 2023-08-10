@@ -20,10 +20,10 @@ if [ $num -lt 4 ]; then
 fi
 maxidx=`expr $num - 1`
 v1=$(jq '.Address' upload/CN${maxidx}/keys/validator)
-epoch=$(./deploy cn jsexec --id $id "governance.itemsAt()" | grep "istanbul.epoch" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
+epoch=$(./deploy cn jsexec --id $id "governance.getParams()" | grep "istanbul.epoch" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
 blk=$(./deploy cn jsexec --id $id "klay.blockNumber")
 epochIdx=$((blk / epoch))
-govmode=$(./deploy cn jsexec --id $id "governance.itemsAt()" | grep "governance.governancemode" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
+govmode=$(./deploy cn jsexec --id $id "governance.getParams()" | grep "governance.governancemode" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
 
 # Check if the governancemode is 'ballot'. If it is, change it into 'single'
 if [ ${govmode} == "\"ballot\"" ]; then
@@ -35,7 +35,7 @@ if [ ${govmode} == "\"ballot\"" ]; then
   sleep ${wait}
   echo
   # Check if the governancemode has changed
-  govmode=$(./deploy cn jsexec --id $id "governance.itemsAt()" | grep "governance.governancemode" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
+  govmode=$(./deploy cn jsexec --id $id "governance.getParams()" | grep "governance.governancemode" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
   if [ ${govmode} == "\"single\"" ]; then
     echo "Governancemode has changed successfully"
     echo

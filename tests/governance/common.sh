@@ -5,7 +5,7 @@ GREEN='\033[0;32m'
 NC='\033[0m'
 
 wait_new_epoch() {
-	epoch=$(./deploy cn jsexec --id 0 "governance.itemsAt()" | grep "istanbul.epoch" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
+	epoch=$(./deploy cn jsexec --id 0 "governance.getParams()" | grep "istanbul.epoch" | awk -F":" '{print $2}' | awk -F"," '{print $1}')
 	blk=$(./deploy cn jsexec --id 0 "klay.blockNumber")
 	epochIdx=$((blk / epoch))
 	curEpochIdx=$epochIdx
