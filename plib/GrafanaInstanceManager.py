@@ -128,7 +128,7 @@ class GrafanaInstanceManager(AWSInstanceManager):
 		if len(hosts) == 0:
 			print ("No hosts available.")
 
-		self.execute(hosts, "sudo systemctl start prometheus.service")
+		self.execute(hosts, "nohup prometheus --config.file=/etc/prometheus/prometheus.yml > /dev/null 2>&1 &")
 		self.execute(hosts, "sudo systemctl start grafana-server")
 
 	def Stop(self):
@@ -136,7 +136,7 @@ class GrafanaInstanceManager(AWSInstanceManager):
 		if len(hosts) == 0:
 			print ("No hosts available.")
 
-		self.execute(hosts, "sudo systemctl stop prometheus.service")
+		self.execute(hosts, "pkill prometheus")
 		self.execute(hosts, "sudo systemctl stop grafana-server")
 
 	def PrintUrl(self):
