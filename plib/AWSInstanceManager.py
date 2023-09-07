@@ -1135,11 +1135,13 @@ class AWSInstanceManager:
 		if "locust" in command:
 			target_library = "locust"
 			install_cmd = "sudo yum install python3 python3-pip gcc -y > /dev/null \
-			&& pip3 install --user web3 locust==1.2.3 > /dev/null"
+			&& pip3 install --user web3 locust==1.2.3 > /dev/null 2>&1"
 		elif "prometheus" in command:
 			target_library = "prometheus"
-			install_cmd = "curl -s https://packagecloud.io/install/repositories/prometheus-rpm/release/script.rpm.sh | sudo bash > /dev/null \
-			&& sudo yum install prometheus2 -y > /dev/null"
+			# For now, it only supports linux amd64 arch. Later, support various archs.
+			install_cmd = "nohup wget https://github.com/prometheus/prometheus/releases/download/v2.37.8/prometheus-2.37.8.linux-amd64.tar.gz > /dev/null 2>&1 \
+			&& sudo tar -xvf prometheus-2.37.8.linux-amd64.tar.gz -C /etc > /dev/null 2>&1 && sudo mv /etc/prometheus-2.37.8.linux-amd64 /etc/prometheus \
+			&& sudo cp /etc/prometheus/prometheus /usr/local/bin > /dev/null 2>&1"
 		elif "grafana" in command:
 			target_library = "grafana"
 			install_cmd = "wget -q https://dl.grafana.com/enterprise/release/grafana-enterprise-8.4.5-1.x86_64.rpm \
